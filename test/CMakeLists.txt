@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 
+set(CMAKE_CXX_STANDARD 14)
+
 option(CONFIGURU_VALUE_SEMANTICS "CONFIGURU_VALUE_SEMANTICS" ON)
 if (CONFIGURU_VALUE_SEMANTICS)
     add_compile_options(-DCONFIGURU_VALUE_SEMANTICS=1)
@@ -21,9 +23,6 @@ if(NOT CMAKE_BUILD_TYPE)
       "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
-find_package(Boost REQUIRED filesystem system)
-add_definitions(-DBOOST_FILESYSTEM_VERSION=3)
-include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 include_directories(SYSTEM .)
 
 MESSAGE(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
@@ -53,8 +52,6 @@ file(GLOB source
 
 add_executable(configuru_test ${source})
 
-find_package(Threads)
-target_link_libraries(configuru_test ${Boost_FILESYSTEM_LIBRARY})
-target_link_libraries(configuru_test ${Boost_SYSTEM_LIBRARY})
-target_link_libraries(configuru_test ${CMAKE_THREAD_LIBS_INIT}) # For pthreads
 target_link_libraries(configuru_test dl) # For ldl
+target_link_libraries(configuru_test stdc++fs) # for <experimental/filesystem>
+target_link_libraries(configuru_test pthread)

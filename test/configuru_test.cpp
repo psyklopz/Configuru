@@ -23,11 +23,11 @@
 
 #include <iostream>
 
-#include <boost/filesystem.hpp>
+#include <experimental/filesystem>
 
 #include <json.hpp>
 
-namespace fs = boost::filesystem;
+namespace fs = std::experimental::filesystem;
 using namespace configuru;
 
 // ----------------------------------------------------------------------------
@@ -37,9 +37,9 @@ std::vector<fs::path> list_files(fs::path directory, std::string extension)
 	std::vector<fs::path> result;
 	fs::directory_iterator it(directory);
 	fs::directory_iterator end;
-	for (; it != end; ++it) {
-		if (fs::is_regular_file(it->status()) && fs::extension(*it) == extension) {
-			result.push_back(it->path());
+	for (auto& p: it) {
+		if (fs::is_regular_file(p.status()) && p.path().extension() == extension) {
+			result.push_back(p.path());
 		}
 	}
 	std::sort(result.begin(), result.end());
